@@ -16,7 +16,7 @@ def get_url_list_kli():
     url_list = list()
     for y in years:
         for m in months:
-            if m in range(1,10):
+            if m in range(1, 10):
                 m = "0" + str(m)
             url_list.append(url + str(y) + "/" + str(y) + "_" + str(m) + "_k.zip")
     return url_list
@@ -97,11 +97,11 @@ def filter_pollution_data(files):
         df = pd.read_excel(f, index_col=0, delimiter=";")
         df = df["PM10"].iloc[1:]
         print(df)
-        df.to_csv("./pollution_out/" + f.split("/", -1)[-1][:-5] + ".csv", sep=";")
+        df.to_csv("./raw_data/daily/pollution_out2/" + f.split("/", -1)[-1][:-5] + ".csv")
 
 
 def merge_csv(files, not_inc_header=False):
-    with open("out_pollution2" + ".csv", "a") as f_out:
+    with open("out_pollution4" + ".csv", "a") as f_out:
         header_saved = not_inc_header
         for file in files:
             with open(file) as f_in:
