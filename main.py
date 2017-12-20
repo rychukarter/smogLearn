@@ -97,4 +97,11 @@ print(mean_absolute_error(y_test, forest_v))
 
 # df.to_csv("data2.csv", sep=";")
 
-
+x_axis = np.arange(10)
+plt.plot(x_axis, y_test.iloc[0:10], 'ro', label="y_test")
+plt.plot(x_axis, y_rbf[0:10], 'g^', label="y_rbf")
+plt.plot(x_axis, tree_v[0:10], 'bs', label="tree_v")
+plt.plot(x_axis, forest_v[0:10], 'k*', label="forest_v")
+plt.legend()
+plt.grid('True')
+plt.show()
