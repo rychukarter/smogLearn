@@ -54,7 +54,7 @@ parameters = {
     "gamma": [1e-8, 1e-7, 1e-6, 1e-5]
     }
 
-grid = GridSearchCV(SVR(), parameters, cv=5, verbose=2)
+grid = GridSearchCV(SVR(), parameters, cv=5, verbose=2, return_train_score=True)
 regr_1 = DecisionTreeRegressor(max_depth=10)
 regr_rf = RandomForestRegressor(max_depth=10, random_state=3)
 
@@ -74,7 +74,7 @@ forest_reg = regr_rf.fit(X_train, y_train)
 y_rbf = grid_rbf.predict(X_test)
 tree_v = tree_reg.predict(X_test)
 forest_v = forest_reg.predict(X_test)
-
+print(grid.cv_results_)
 print(y_rbf[0:10], y_test.iloc[0:10])
 print(r2_score(y_test, y_rbf))
 print(mean_squared_error(y_test, y_rbf))
@@ -97,11 +97,10 @@ print(mean_absolute_error(y_test, forest_v))
 
 # df.to_csv("data2.csv", sep=";")
 
-x_axis = np.arange(10)
-plt.plot(x_axis, y_test.iloc[0:10], 'ro', label="y_test")
-plt.plot(x_axis, y_rbf[0:10], 'g^', label="y_rbf")
-plt.plot(x_axis, tree_v[0:10], 'bs', label="tree_v")
-plt.plot(x_axis, forest_v[0:10], 'k*', label="forest_v")
+x_axis = np.arange(100)
+plt.plot(x_axis, y_test.iloc[0:100], 'ro', label="y_test")
+plt.plot(x_axis, y_rbf[0:100], 'g^', label="y_rbf")
+plt.plot(x_axis, forest_v[0:100], 'k*', label="forest_v")
 plt.legend()
 plt.grid('True')
 plt.show()
