@@ -10,43 +10,24 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 
-'''
-df = pd.read_csv("data2.csv", delimiter=";", index_col=0)
-df.index = pd.to_datetime(df.index)
-df2 = pd.read_excel("./raw_data/daily/pollution/2015_PM10_24g.xlsx", index_col=0)
-df2 = df2.iloc[2:]
-df2.index = pd.to_datetime(df2.index)
-df.loc["2015-01-01":"2015-12-31", 'PM10'] = df2['PM10']
-df['PM10'] = df['PM10'].str.replace(',', '.')
-df['PM10'] = df['PM10'].astype(float)
-empty_rows = df.isnull().sum()
-del df["Stan gruntu Z/R"]
-del df["Rodzaj opadu"]
-df["PM10_prev"] = df["PM10"].shift(1)
-df = df.dropna(axis=0, how="any")
-'''
-#df.to_csv("data3.csv", sep=";")
-
-df = pd.read_csv("data3.csv", delimiter=";", index_col=0)
+df = pd.read_csv("data_proper.csv", delimiter=";", index_col=0)
 #df.index = pd.to_datetime(df.index)
-del df['Miesiąc.1']
 df = df.reset_index(drop=True)
-#df = shuffle(df)
+df = shuffle(df)
 
 msk = np.random.rand(len(df)) < 0.8
 
 train = df[msk]
 test = df[~msk]
-train = shuffle(train)
+#train = shuffle(train)
 
-X_train = train.drop(["PM10"], axis=1)
-y_train = train["PM10"]
+X_train = train.drop(["PM10_next"], axis=1)
+y_train = train["PM10_next"]
 
-X_test = test.drop(["PM10"], axis=1)
-y_test = test["PM10"]
+X_test = test.drop(["PM10_next"], axis=1)
+y_test = test["PM10_next"]
 
 parameters = {
     "kernel": ["rbf"],
