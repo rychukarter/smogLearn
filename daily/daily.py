@@ -41,6 +41,14 @@ def get_url_list_synop():
     return url_list
 
 
+def get_url_list_termin_synop():
+    url = "https://dane.imgw.pl/data/dane_pomiarowo_obserwacyjne/dane_meteorologiczne/terminowe/synop/"
+    url_list = list()
+    for y in years:
+        url_list.append(url + str(y) + "/" + str(y) + "_" + warsaw_station + "_s.zip")
+    return url_list
+
+
 def get_station_list():
     station_list = list()
     data = urlreq.urlopen("https://dane.imgw.pl/assets/libs/stacje.json")
