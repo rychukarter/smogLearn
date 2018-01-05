@@ -27,7 +27,7 @@ def get_url_list_opad():
     url_list = list()
     for y in years:
         for m in months:
-            if m in range(1,10):
+            if m in range(1, 10):
                 m = "0" + str(m)
             url_list.append(url + str(y) + "/" + str(y) + "_" + str(m) + "_o.zip")
     return url_list
