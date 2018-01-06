@@ -83,12 +83,13 @@ def get_file_list(directory):
     return d_file_list
 
 
-def filter_weather_data(files):
+def filter_weather_data(files, directory):
     for f in files:
+        f = "./raw_data/daily/terminowe/" + f
         sd_f = f.split("/", -1)[-1].split("_" + warsaw_station)[0]
-        names_list = get_column_names("./format/" + sd_f + "_format.txt")
+        names_list = get_column_names("./raw_data/daily/format/" + sd_f + "_format.txt")
         df = pd.read_csv(f, delimiter=',', names=names_list, encoding="ISO-8859-1")
-        df.index = df["Rok"].map(str) + "-" + df["Miesiąc"].map(str) + "-" + df["Dzień"].map(str)
+        df.index = df["Rok"].map(str) + "-" + df["Miesiąc"].map(str) + "-" + df["Dzień"].map(str) + df["Godzina"].map(str)
         del df["Kod stacji"]
         del df["Nazwa stacji"]
         del df["Rok"]
@@ -97,7 +98,7 @@ def filter_weather_data(files):
             if "Status" in name:
                 del df[name]
 
-        df.to_csv("./synop_out/new_" + f.split("/", -1)[-1], sep=";", encoding="UTF-8")
+        df.to_csv(directory + "new_" + f.split("/", -1)[-1], sep=";", encoding="UTF-8")
 
 
 def filter_pollution_data(files):
@@ -108,14 +109,14 @@ def filter_pollution_data(files):
         df.to_csv("./raw_data/daily/pollution_out2/" + f.split("/", -1)[-1][:-5] + ".csv")
 
 
-def merge_csv(files, not_inc_header=False):
-    with open("out_pollution4" + ".csv", "a") as f_out:
+def merge_csv(files, out_file, not_inc_header=False):
+    with open(out_file, "a") as f_out:
         header_saved = not_inc_header
         for file in files:
             with open(file) as f_in:
-                header = next(f_in)
-                if not header_saved:
-                    f_out.write(header)
-                    header_saved = False
+                #header = next(f_in)
+                #if not header_saved:
+                #    f_out.write(header)
+                #    header_saved = False
                 for line in f_in:
                     f_out.write(line)

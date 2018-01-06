@@ -7,7 +7,6 @@ raw_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
 
 df = pd.read_csv("data2.csv", delimiter=";", index_col=0)
 df.index = pd.to_datetime(df.index)
-print(df.columns)
 df2 = pd.read_excel("./raw_data/daily/pollution/2015_PM10_24g.xlsx", index_col=0)
 df2 = df2.iloc[2:]
 df2.index = pd.to_datetime(df2.index)
@@ -74,7 +73,28 @@ for file in raw_files:
             df.at[index.date(), "PM10_h_" + str(index.hour)] = row["HERE"]
         except:
             print("NOT ADDED:", index.date())
+df = df.dropna(axis=0, how="any")
+df.to_csv("data_proper2.csv", sep=";")
+print(df.dtypes)
+
+df_wind = pd.read_csv("./test.csv", delimiter=";", index_col=0)
+df_wind.index = pd.to_datetime(df_wind.index)
+for index, row in df_wind.iterrows():
+    print(index.date())
+    try:
+        df.at[index.date(), "Wind_direction_h_" + str(row["Godzina"])] = row["Kierunek wiatru"]
+    except:
+        print("NOT ADDED:", index.date())
+
+print(df.dtypes)
+for x in range(0, 24):
+    #df['Wind_direction_h_' + str(x)] = df['Wind_direction_h_' + str(x)].str.replace(',', '.')
+    df['PM10_h_' + str(x)] = df['PM10_h_' + str(x)].str.replace(',', '.')
+
+    #df['Wind_direction_h_' + str(x)] = df['Wind_direction_h_' + str(x)].astype(float)
+    df['PM10_h_' + str(x)] = df['PM10_h_' + str(x)].astype(float)
 
 df = df.dropna(axis=0, how="any")
+print(df.dtypes)
 print(df)
-df.to_csv("data_proper2.csv", sep=";")
+df.to_csv("data_proper4.csv", sep=";")

@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 df = pd.read_csv("data_proper.csv", delimiter=";", index_col=0)
 df = df.reset_index(drop=True)

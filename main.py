@@ -12,8 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("data_proper.csv", delimiter=";", index_col=0)
-#df.index = pd.to_datetime(df.index)
+df = pd.read_csv('data_proper3.csv', delimiter=";", index_col=0)
+
 df = df.reset_index(drop=True)
 df = shuffle(df)
 
