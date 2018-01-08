@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv('data_proper3.csv', delimiter=";", index_col=0)
+df = pd.read_csv('out.csv', delimiter=";", index_col=0)
 
 df = df.reset_index(drop=True)
 df = shuffle(df)
@@ -79,9 +79,10 @@ print(mean_absolute_error(y_test, forest_v))
 # df.to_csv("data2.csv", sep=";")
 
 x_axis = np.arange(100)
-plt.plot(x_axis, y_test.iloc[0:100], 'ro', label="y_test")
-plt.plot(x_axis, y_rbf[0:100], 'g^', label="y_rbf")
-plt.plot(x_axis, forest_v[0:100], 'k*', label="forest_v")
+plt.plot(x_axis, y_test.iloc[0:100], label="y_test")
+plt.plot(x_axis, forest_v[0:100], label="forest_v")
 plt.legend()
 plt.grid('True')
+plt.show()
+plt.plot(x_axis, y_rbf[0:100], label="y_rbf")
 plt.show()
