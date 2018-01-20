@@ -1,16 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("data_proper.csv", delimiter=";", index_col=0)
-df = df.reset_index(drop=True)
-print(df.columns)
+df = pd.read_csv("out.csv", delimiter=";", index_col=0)
 
-x_axis = df.index
-
-plt.plot(x_axis[2700:3200], df["PM10_h_12"][2700:3200],  label="y_test")
-plt.plot(x_axis[2700:3200], df["PM10_h_2"][2700:3200], label="y_test")
-plt.plot(x_axis[2700:3200], df["PM10_h_6"][2700:3200], label="y_test")
-plt.plot(x_axis[2700:3200], df["PM10_h_18"][2700:3200], label="y_test")
-plt.legend()
-plt.grid('True')
+df.index = pd.to_datetime(df.index)
+df2 = df["PM10"]
+df2.plot()
 plt.show()
