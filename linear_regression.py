@@ -1,21 +1,21 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from utilities import utilities
 from sklearn.utils import shuffle
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import Lasso
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import ShuffleSplit
-from sklearn.feature_selection import RFECV
-from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, PolynomialFeatures
+from sklearn.linear_model import Ridge, RidgeCV, Lasso, LassoCV
+from sklearn.feature_selection import f_regression, RFECV, SelectKBest, SelectFromModel
+from sklearn.model_selection import ShuffleSplit, train_test_split
+from sklearn.decomposition import PCA
 
 
-print("-----Pre-processing-----")
+output_directory = './results/linear/Normalized/'
+
+print("Pre-processing")
 # Import data
 data = pd.read_csv("out.csv", delimiter=";", index_col=0)
-data = shuffle(data)
+# Shuffle only once to get same data order for every test - no shuffling later (except CV)
+data = shuffle(data, random_state=333)
 
 # Split data into features and targets
 X = data.drop(["PM10_next"], axis=1)
@@ -26,55 +26,100 @@ y_log = data["PM10_log"]
 # Get names for features output array
 column_names = X.columns.values
 
-# Normalize by removing mean and scaling to unit variance
+# Scale by removing mean and scaling to unit variance
 scaler = StandardScaler()
 scaler_output = scaler.fit_transform(X)
 X_scaled = pd.DataFrame(scaler_output, columns=column_names, index=X.index)
 
-# Split data into train and test with shuffling - test size: 20%
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, train_size=0.8, shuffle=False)
-# Split data with log(target) into train and test with shuffling - test size: 20%
-X_train_log, X_test_log, y_train_log, y_test_log = train_test_split(X_scaled, y_log, train_size=0.8, shuffle=False)
+# Normalize
+minmax = MinMaxScaler()
+minmax_output = minmax.fit_transform(X)
+X_normalized = pd.DataFrame(minmax_output, columns=column_names, index=X.index)
 
-print("-----Feature selection - RFE-----")
+# Split data into train and test without shuffling - test size: 20%
+X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_normalized, y, y_log,
+                                                                             train_size=0.8, test_size=0.2,
+                                                                             shuffle=False)
+
+print("Performing PCA")
+# Perform PCA
+pca = PCA(n_components=200)
+X_pca = pca.fit_transform(X_scaled)
+X_train_pca, X_test_pca = train_test_split(X_pca, train_size=0.8, test_size=0.2, shuffle=False)
+
+
+print("Getting estimators")
 # Get simple linear regression object
-ridge_reg = Ridge()
+ridge_reg = Ridge(normalize=False)
+ridge_reg_cv = RidgeCV(alphas=(50.0, 100.0, 200.0), normalize=False)
+lasso_reg = Lasso(normalize=False)
+lasso_reg_cv = LassoCV(normalize=False, n_alphas=10)
+reg_list = [("Ridge", ridge_reg),
+            ("RidgeCV", ridge_reg_cv),
+            ("Lasso", lasso_reg),
+            ("LassoCV", lasso_reg_cv)]
+
+
+print("Feature selection - RFE")
 # Feature selection - done with recursive feature elimination
-feature_selection_rfe = RFECV(ridge_reg, step=1, verbose=0, cv=ShuffleSplit(n_splits=10, train_size=0.8))
+feature_selection_rfe = RFECV(ridge_reg, step=1, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2))
 feature_selection_rfe.fit(X_train, y_train)
 # Get new data set containing only selected features
-X_selected = X_scaled[X_scaled.columns[feature_selection_rfe.get_support()]]
+X_selected_rfe = X_scaled[X_scaled.columns[feature_selection_rfe.get_support()]]
 # Print feature selection results
-print("RFE, number of selected features:", feature_selection_rfe.n_features_)
+print("RFE, selected features:", len(X_selected_rfe.columns))
 # put here some plots
-X_train_fs_rfe, X_test_fs_rfe, y_train_fs_rfe, y_test_fs_rfe = train_test_split(X_selected, y, train_size=0.8, shuffle=False)
+X_train_fs_rfe, X_test_fs_rfe = train_test_split(X_selected_rfe, train_size=0.8, test_size=0.2, shuffle=False)
 
-# Model selection by grid search - try every provided parameters set
-parameters_gs = {
-    'alpha': [100, 200, 500, 1000, 2000],
-    'solver': ['auto', 'lsqr', 'saga'],
-}
-grid_rf = GridSearchCV(ridge_reg, parameters_gs, cv=2, verbose=0, scoring='r2', return_train_score=True)
-grid_rf.fit(X_train, y_train)
 
-# Print results of model selection
-grid_result_df = pd.DataFrame(grid_rf.cv_results_)
-grid_result_df.to_csv("result.csv", sep=";")
-print(grid_result_df.sort_values('rank_test_score'))
+print("Feature selection - SelectKBest")
+# Feature selection by selecting K best features
+feature_selection_skb = SelectKBest(score_func=f_regression, k=200)
+feature_selection_skb.fit(X_train, y_train)
+# Get new data set containing only selected features
+X_selected_skb = X_scaled[X_scaled.columns[feature_selection_skb.get_support()]]
+# Print feature selection results
+print("SelectKBest, selected features:", len(X_selected_skb.columns))
+X_train_fs_skb, X_test_fs_skb = train_test_split(X_selected_skb, train_size=0.8, test_size=0.2, shuffle=False)
 
-# Perform Test with basic model
-print("-----Ridge test-----")
-utilities.test_regression(ridge_reg, X_train, X_test, y_train, y_test)
-print("-----Ridge test with log(target)-----")
-utilities.test_regression(ridge_reg, X_train_log, X_test_log, y_train_log, y_test_log)
-print("-----Ridge test on selected features-----")
-utilities.test_regression(ridge_reg, X_train_fs_rfe, X_test_fs_rfe, y_train_fs_rfe, y_test_fs_rfe)
 
-# Perform test on GridSearch selected model
-print("-----Ridge test-----")
-utilities.test_regression(grid_rf, X_train, X_test, y_train, y_test)
-print("-----Ridge test with log(target)-----")
-utilities.test_regression(grid_rf, X_train_log, X_test_log, y_train_log, y_test_log)
-print("-----Ridge test on selected features-----")
-utilities.test_regression(grid_rf, X_train_fs_rfe, X_test_fs_rfe, y_train_fs_rfe, y_test_fs_rfe)
+print("Feature selection - SelectFromModel")
+# Feature selection by threshold
+feature_selection_sfm = SelectFromModel(ridge_reg_cv, threshold="median")
+feature_selection_sfm.fit(X_train, y_train)
+# Get new data set containing only selected features
+X_selected_sfm = X_scaled[X_scaled.columns[feature_selection_sfm.get_support()]]
+# Print feature selection results
+print("SelectFromModel, selected features:", len(X_selected_sfm.columns))
+X_train_fs_sfm, X_test_fs_sfm = train_test_split(X_selected_sfm, train_size=0.8, test_size=0.2, shuffle=False)
 
+
+print("Perform test - basic data")
+results = utilities.test_regressions(reg_list, X_train, X_test, y_train, y_test, '',
+                                     plot_learning_curves=True, save_path=output_directory)
+results_log = utilities.test_regressions(reg_list, X_train, X_test, y_train_log, y_test_log, '_log',
+                                         plot_learning_curves=True, save_path=output_directory)
+print("Perform test - PCA")
+results = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train, y_test, '_pca',
+                                     plot_learning_curves=True, save_path=output_directory)
+results_log = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train_log, y_test_log, '_pca_log',
+                                         plot_learning_curves=True, save_path=output_directory)
+print("Perform test - RFE")
+results_fs_rfe = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_rfe, y_train, y_test, '_rfe',
+                                            plot_learning_curves=True, save_path=output_directory)
+results_fs_rfe_log = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_rfe, y_train_log, y_test_log,
+                                                '_rfe_log', plot_learning_curves=True, save_path=output_directory)
+print("Perform test - SKB")
+results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb_log',
+                                            plot_learning_curves=True, save_path=output_directory)
+results_fs_skb_log = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train_log, y_test_log,
+                                                '_skb_log', plot_learning_curves=True, save_path=output_directory)
+print("Perform test - SFM")
+results_fs_sfm = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_sfm, y_train, y_test, '_sfm',
+                                            plot_learning_curves=True, save_path=output_directory)
+results_fs_sfm_log = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_sfm, y_train_log, y_test_log,
+                                                '_sfm_log', plot_learning_curves=True, save_path=output_directory)
+
+out_df = pd.concat([results, results_log, results_fs_rfe, results_fs_rfe_log, results_fs_skb,
+                    results_fs_skb_log, results_fs_sfm, results_fs_sfm_log])
+out_df.to_csv(output_directory + 'results.csv', sep=';')
