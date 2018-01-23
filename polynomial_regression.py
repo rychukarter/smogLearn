@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 from utilities import utilities
 from sklearn.utils import shuffle
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, PolynomialFeatures
@@ -13,6 +14,8 @@ from sklearn.decomposition import PCA
 # potem zmien linika 43 na X_scaled_std i w output_directory scaled_minmax na scaled_std
 k = 10
 output_directory = './results/polynomial/scaled_minmax/k_'+str(k)+'/'
+if not os.path.isdir(output_directory):
+    os.makedirs(output_directory)
 
 print("Pre-processing")
 # Import data
