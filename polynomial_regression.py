@@ -10,8 +10,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 
 
-# 10,20,30,40,50
-# potem zmien linika 43 na X_scaled_std i w output_directory scaled_minmax na scaled_std
 k = 10
 output_directory = './results/polynomial/scaled_minmax/k_'+str(k)+'/'
 if not os.path.isdir(output_directory):
@@ -91,14 +89,14 @@ X_train_fs_skb, X_test_fs_skb = train_test_split(X_skb_poly, train_size=0.8, tes
 
 print("Perform test - PCA")
 results_pca = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train, y_test, '_pca',
-                                     plot_learning_curves=True, save_path=output_directory)
+                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 results_pca_log = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train_log, y_test_log, '_pca_log',
-                                         plot_learning_curves=True, save_path=output_directory)
+                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 print("Perform test - SKB")
 results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb',
-                                            plot_learning_curves=True, save_path=output_directory)
+                                            plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 results_fs_skb_log = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train_log, y_test_log,
-                                                '_skb_log', plot_learning_curves=True, save_path=output_directory)
+                                                '_skb_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 
 out_df = pd.concat([results_pca, results_fs_skb, results_pca_log, results_fs_skb_log])
 out_df.to_csv(output_directory + 'results.csv', sep=';')

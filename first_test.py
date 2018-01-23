@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 from utilities import utilities
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
@@ -13,6 +14,8 @@ from sklearn.linear_model import RidgeCV
 
 # Directory to save results
 output_directory = './results/introduction/'
+if not os.path.isdir(output_directory):
+    os.makedirs(output_directory)
 
 print("Pre-processing")
 # Import data

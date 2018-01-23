@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
+import os
 from utilities import utilities
 from sklearn.utils import shuffle
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, PolynomialFeatures
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.linear_model import Ridge, RidgeCV, Lasso, LassoCV
 from sklearn.feature_selection import f_regression, RFECV, SelectKBest, SelectFromModel
 from sklearn.model_selection import ShuffleSplit, train_test_split
@@ -10,6 +11,8 @@ from sklearn.decomposition import PCA
 
 # Directory to save results
 output_directory = './results/linear/scaled_minmax/'
+if not os.path.isdir(output_directory):
+    os.makedirs(output_directory)
 
 print("Pre-processing")
 # Import data
@@ -125,4 +128,4 @@ results_fs_sfm_log = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test
 
 out_df = pd.concat([results, results_pca, results_fs_rfe, results_fs_skb, results_fs_sfm,
                     results_log, results_pca_log, results_fs_rfe_log, results_fs_skb_log, results_fs_sfm_log])
-out_df.to_csv(output_directory + 'lin_results.csv', sep=';')
+out_df.to_csv(output_directory + 'results.csv', sep=';')

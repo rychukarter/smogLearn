@@ -27,53 +27,16 @@ print("\n----------------------------------------------------------\n")
 
 df = pd.concat([weather_24h_data, weather_1h_data, pollution_24h_data, pollution_1h_data], axis=1)
 df.index = pd.to_datetime(df.index)
-
 df["Dzień tygodnia"] = df.index.weekday
 df["PM10_prev"] = df["PM10"].shift(1)
 df["PM10_next"] = df["PM10"].shift(-1)
-
 df = df.dropna(axis=0, how="any")
-df.to_csv("out.csv", sep=";")
-print(df.dtypes)
+df.to_csv("data_daily_hourly.csv", sep=";")
 
-
-'''
-print("\n----------------------------------------------------------\n")
-df.rename(columns={'Miesiąc': 'Month',
-                   'Maksymalna temperatura dobowa': 'Max process_data temp',
-                   'Minimalna temperatura dobowa': 'Min process_data temp',
-                   'Średnia temperatura dobowa': 'Avg process_data temp',
-                   'Temperatura minimalna przy gruncie': 'Min ground temp',
-                   'Suma dobowa opadu': 'Sum of process_data fall',
-                   'Wysokość pokrywy śnieżnej': 'Snow height',
-                   'Równoważnik wodny śniegu': 'Water snow equivalent',
-                   'Usłonecznienie': 'Insolation',
-                   'Czas trwania opadu deszczu': 'Rain fall length',
-                   'Czas trwania opadu śniegu': "Snow fall length",
-                   'Czas trwania opadu deszczu ze śniegiem': 'RainSnow fall length',
-                   'Czas trwania gradu': 'Hail fall length',
-                   'Czas trwania mgły': 'Mist duration',
-                   'Czas trwania zamglenia': 'Misty duration',
-                   'Czas trwania sadzi': 'Rime frost duration',
-                   'Czas trwania gołoledzi': 'Glaze duration',
-                   'Czas trwania zamieci śnieżnej niskiej': 'Low blizzard duration',
-                   'Czas trwania zamieci śnieżnej wysokiej': 'High blizzard duration',
-                   'Czas trwania zmętnienia': 'Turbidity duration',
-                   'Czas trwania wiatru >=10m/s': 'Wind 10more duration',
-                   'Czas trwania wiatru >15m/s': 'Wind 15more duration',
-                   'Czas trwania burzy': 'Storm duration',
-                   'Czas trwania rosy': 'Dew duartion',
-                   'Czas trwania szronu': 'Hoarfrost duration',
-                   'Wystąpienie pokrywy śnieżnej': 'Snow cover',
-                   'Izoterma dolna': 'Low isotherm',
-                   'Izoterma górna': 'High isotherm',
-                   'Aktynometria': 'Acrinometry',
-                   'Średnie dobowe zachmurzenie ogólne': 'Avg process_data general clouds',
-                   'Średnia dobowa prędkość wiatru': 'Avg process_data wind speed',
-                   'Średnia dobowe ciśnienie pary wodnej': 'Avg steam pressure',
-                   'Średnia dobowa wilgotność względna': 'Avg process_data humidity relative',
-                   'Średnia dobowe ciśnienie na poziomie stacji': 'Avg process_data pressure station level',
-                   'Średnie dobowe ciśnienie na pozimie morza': 'Avg process_data pressure sea level',
-                   'Suma opadu dzień': 'Day fall',
-                   'Suma opadu noc': 'Night fall'}, inplace=True)
-'''
+df2 = pd.concat([weather_24h_data, pollution_24h_data], axis=1)
+df2.index = pd.to_datetime(df.index)
+df2["Dzień tygodnia"] = df2.index.weekday
+df2["PM10_prev"] = df2["PM10"].shift(1)
+df2["PM10_next"] = df2["PM10"].shift(-1)
+df2 = df2.dropna(axis=0, how="any")
+df2.to_csv("data_daily.csv", sep=";")

@@ -88,8 +88,7 @@ def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_s
     index = [(x[0] + data_name) for x in estimators]
     results = []
     for name, e in estimators:
-        y_pred, y_pred_train, scores = test_one_regression(e, X_train, X_test, y_train,
-                                                                                           y_test)
+        y_pred, y_pred_train, scores = test_one_regression(e, X_train, X_test, y_train, y_test)
         results.append(scores)
         if plot_learning_curves:
             lc = plot_learning_curve(e, name+data_name, X_train, y_train, train_sizes=train_sizes)
