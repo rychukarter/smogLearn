@@ -35,6 +35,16 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=1, tr
     return plt
 
 
+def plot_error_histogram(y_test, y_pred, title="Prediction error histogram"):
+    error = y_test - y_pred
+    n, bins, patches = plt.hist(error, 50, facecolor='g')
+    plt.xlabel('Prediction error')
+    plt.ylabel('Count')
+    plt.title(title)
+    plt.grid(True)
+    return plt
+
+
 def test_one_regression(estimator, X_train, X_test, y_train, y_test, print_results=False):
 
     lin_reg = estimator
@@ -54,20 +64,36 @@ def test_one_regression(estimator, X_train, X_test, y_train, y_test, print_resul
               "\nR2_test:\t", r2_test,
               "\tR2_train:\t", r2_train,
               "\n-----------------------------------------------------------------")
+        plot_error_histogram(y_test, y_pred).show()
 
-    return mea_test, mea_train, r2_test, r2_train
+    return y_pred, y_pred_train, mea_test, mea_train, r2_test, r2_train
 
 
-def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_scores',
-                     plot_learning_curves=False, train_sizes=np.linspace(.1, 1.0, 10), save_path=None):
+def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_scores', save_path=None,
+                     plot_learning_curves=False, train_sizes=np.linspace(.1, 1.0, 10),
+                     plot_histogram=False):
 
     index = [(x[0] + data_name) for x in estimators]
     results = []
     for name, e in estimators:
-        mea_test, mea_train, r2_test, r2_train = test_one_regression(e, X_train, X_test, y_train, y_test)
+        y_pred, y_pred_train, mea_test, mea_train, r2_test, r2_train = test_one_regression(e, X_train, X_test, y_train,
+                                                                                           y_test)
         results.append([mea_test, mea_train, r2_test, r2_train])
         if plot_learning_curves:
             lc = plot_learning_curve(e, name+data_name, X_train, y_train, train_sizes=train_sizes)
-            lc.savefig(save_path+name+data_name+'.png', bbox_inches='tight')
+            if save_path:
+                lc.savefig(save_path+name+data_name+'_lc.png', bbox_inches='tight')
             lc.close()
+        if plot_histogram:
+            hist_test = plot_error_histogram(y_test, y_pred, name+data_name+"_test")
+            if save_path:
+                hist_test.savefig(save_path+name+data_name+'_hist_test.png', bbox_inches='tight')
+
+            hist_train = plot_error_histogram(y_train, y_pred_train, name+data_name+"_train")
+            if save_path:
+                hist_train.savefig(save_path+name+data_name+'_hist_train.png', bbox_inches='tight')
+
+            hist_test.close()
+            hist_train.close()
+
     return pd.DataFrame(results, columns=['MEA_test', 'MEA_train', 'R2_test', 'R2_train'], index=index)

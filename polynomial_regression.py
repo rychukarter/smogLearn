@@ -9,7 +9,7 @@ from sklearn.model_selection import ShuffleSplit, train_test_split
 from sklearn.decomposition import PCA
 
 
-output_directory = './results/linear/Scaled/'
+output_directory = './results/polynomial/Scaled/'
 
 print("Pre-processing")
 # Import data
@@ -19,22 +19,20 @@ data = shuffle(data, random_state=333)
 
 # Split data into features and targets
 X = data.drop(["PM10_next"], axis=1)
+poly = PolynomialFeatures(degree=2)
+X = poly.fit_transform(X)
 y = data["PM10_next"]
 # Get log of targets
 data["PM10_log"] = np.log(data["PM10_next"])
 y_log = data["PM10_log"]
-# Get names for features output array
-column_names = X.columns.values
 
 # Scale by removing mean and scaling to unit variance
 scaler = StandardScaler()
-scaler_output = scaler.fit_transform(X)
-X_scaled = pd.DataFrame(scaler_output, columns=column_names, index=X.index)
+X_scaled = scaler.fit_transform(X)
 
 # Normalize
 minmax = MinMaxScaler()
-minmax_output = minmax.fit_transform(X)
-X_normalized = pd.DataFrame(minmax_output, columns=column_names, index=X.index)
+X_normalized = minmax.fit_transform(X)
 
 # Split data into train and test without shuffling - test size: 20%
 X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_scaled, y, y_log,
@@ -58,8 +56,17 @@ reg_list = [("Ridge", ridge_reg),
             ("RidgeCV", ridge_reg_cv),
             ("Lasso", lasso_reg),
             ("LassoCV", lasso_reg_cv)]
-
-
+results = utilities.test_regressions(reg_list, X_train, X_test, y_train, y_test, '',
+                                     plot_learning_curves=True, save_path=output_directory)
+results_log = utilities.test_regressions(reg_list, X_train, X_test, y_train_log, y_test_log, '_log',
+                                         plot_learning_curves=True, save_path=output_directory)
+print("Perform test - PCA")
+results_pca = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train, y_test, '_pca',
+                                     plot_learning_curves=True, save_path=output_directory)
+results_pca_log = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train_log, y_test_log, '_pca_log',
+                                         plot_learning_curves=True, save_path=output_directory)
+out_df = pd.concat([results, results_log, results_pca, results_pca_log])
+out_df.to_csv(output_directory + 'results2.csv', sep=';')
 print("Feature selection - RFE")
 # Feature selection - done with recursive feature elimination
 feature_selection_rfe = RFECV(ridge_reg, step=1, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2,
@@ -97,30 +104,30 @@ X_train_fs_sfm, X_test_fs_sfm = train_test_split(X_selected_sfm, train_size=0.8,
 
 print("Perform test - basic data")
 results = utilities.test_regressions(reg_list, X_train, X_test, y_train, y_test, '',
-                                     plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                     plot_learning_curves=True, save_path=output_directory)
 results_log = utilities.test_regressions(reg_list, X_train, X_test, y_train_log, y_test_log, '_log',
-                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                         plot_learning_curves=True, save_path=output_directory)
 print("Perform test - PCA")
 results_pca = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train, y_test, '_pca',
-                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                     plot_learning_curves=True, save_path=output_directory)
 results_pca_log = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train_log, y_test_log, '_pca_log',
-                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                         plot_learning_curves=True, save_path=output_directory)
 print("Perform test - RFE")
 results_fs_rfe = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_rfe, y_train, y_test, '_rfe',
-                                            plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                            plot_learning_curves=True, save_path=output_directory)
 results_fs_rfe_log = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_rfe, y_train_log, y_test_log,
-                                                '_rfe_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                                '_rfe_log', plot_learning_curves=True, save_path=output_directory)
 print("Perform test - SKB")
 results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb_log',
-                                            plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                            plot_learning_curves=True, save_path=output_directory)
 results_fs_skb_log = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train_log, y_test_log,
-                                                '_skb_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                                '_skb_log', plot_learning_curves=True, save_path=output_directory)
 print("Perform test - SFM")
 results_fs_sfm = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_sfm, y_train, y_test, '_sfm',
-                                            plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                            plot_learning_curves=True, save_path=output_directory)
 results_fs_sfm_log = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_sfm, y_train_log, y_test_log,
-                                                '_sfm_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                                '_sfm_log', plot_learning_curves=True, save_path=output_directory)
 
-out_df = pd.concat([results, results_log, results_pca, results_pca_log, results_fs_rfe_log, results_fs_skb,
+out_df = pd.concat([results, results_log, results_pca, results_pca_log,  results_fs_rfe, results_fs_rfe_log, results_fs_skb,
                     results_fs_skb_log, results_fs_sfm, results_fs_sfm_log])
 out_df.to_csv(output_directory + 'results.csv', sep=';')
