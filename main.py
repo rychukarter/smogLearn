@@ -7,11 +7,13 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
+from sklearn.neural_network import MLPRegressor
+from
 from sklearn.linear_model import RidgeCV
 
 
 # Directory to save results
-output_directory = './results/first/'
+output_directory = './results/introduction/'
 
 print("Pre-processing")
 # Import data
@@ -48,3 +50,4 @@ reg_list = [("RidgeCV", ridge_reg),
 
 results = utilities.test_regressions(reg_list, X_train, X_test, y_train, y_test, '',
                                      plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+results.to_csv(output_directory + 'results.csv', sep=';')

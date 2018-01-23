@@ -48,7 +48,7 @@ X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_s
 
 
 print("Getting estimators")
-# Get simple linear regression object
+# Get simple linear regression objects
 ridge_reg = Ridge(normalize=False)
 ridge_reg_cv = RidgeCV(alphas=(100.0, 200.0, 500, 1000), normalize=False)
 lasso_reg = Lasso(normalize=False)

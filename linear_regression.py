@@ -51,7 +51,7 @@ X_train_pca, X_test_pca = train_test_split(X_pca, train_size=0.8, test_size=0.2,
 
 
 print("Getting estimators")
-# Get simple linear regression object
+# Get simple linear regression objects
 ridge_reg = Ridge(normalize=False)
 ridge_reg_cv = RidgeCV(alphas=(50.0, 100.0, 200.0), normalize=False)
 lasso_reg = Lasso(normalize=False)
@@ -125,4 +125,4 @@ results_fs_sfm_log = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test
 
 out_df = pd.concat([results, results_pca, results_fs_rfe, results_fs_skb, results_fs_sfm,
                     results_log, results_pca_log, results_fs_rfe_log, results_fs_skb_log, results_fs_sfm_log])
-out_df.to_csv(output_directory + 'lin_3results.csv', sep=';')
+out_df.to_csv(output_directory + 'lin_results.csv', sep=';')
