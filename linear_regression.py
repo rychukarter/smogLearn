@@ -8,8 +8,8 @@ from sklearn.feature_selection import f_regression, RFECV, SelectKBest, SelectFr
 from sklearn.model_selection import ShuffleSplit, train_test_split
 from sklearn.decomposition import PCA
 
-
-output_directory = './results/linear/Scaled/'
+# Directory to save results
+output_directory = './results/linear/scaled_minmax/'
 
 print("Pre-processing")
 # Import data
@@ -29,22 +29,24 @@ column_names = X.columns.values
 # Scale by removing mean and scaling to unit variance
 scaler = StandardScaler()
 scaler_output = scaler.fit_transform(X)
-X_scaled = pd.DataFrame(scaler_output, columns=column_names, index=X.index)
+X_scaled_std = pd.DataFrame(scaler_output, columns=column_names, index=X.index)
 
-# Normalize
+# Scale to given range - default (0,1)
 minmax = MinMaxScaler()
 minmax_output = minmax.fit_transform(X)
-X_normalized = pd.DataFrame(minmax_output, columns=column_names, index=X.index)
+X_scaled_minmax = pd.DataFrame(minmax_output, columns=column_names, index=X.index)
 
+# Select between Normalization and Scaling
+X_selected = X_scaled_minmax
 # Split data into train and test without shuffling - test size: 20%
-X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_scaled, y, y_log,
+X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_selected, y, y_log,
                                                                              train_size=0.8, test_size=0.2,
                                                                              shuffle=False)
 
 print("Performing PCA")
 # Perform PCA
 pca = PCA(n_components=200)
-X_pca = pca.fit_transform(X_scaled)
+X_pca = pca.fit_transform(X_scaled_std)
 X_train_pca, X_test_pca = train_test_split(X_pca, train_size=0.8, test_size=0.2, shuffle=False)
 
 
@@ -66,7 +68,7 @@ feature_selection_rfe = RFECV(ridge_reg, step=1, verbose=0, cv=ShuffleSplit(n_sp
                                                                             random_state=2973))
 feature_selection_rfe.fit(X_train, y_train)
 # Get new data set containing only selected features
-X_selected_rfe = X_scaled[X_scaled.columns[feature_selection_rfe.get_support()]]
+X_selected_rfe = X_selected[X_selected.columns[feature_selection_rfe.get_support()]]
 # Print feature selection results
 print("RFE, selected features:", len(X_selected_rfe.columns))
 # put here some plots
@@ -75,10 +77,10 @@ X_train_fs_rfe, X_test_fs_rfe = train_test_split(X_selected_rfe, train_size=0.8,
 
 print("Feature selection - SelectKBest")
 # Feature selection by selecting K best features
-feature_selection_skb = SelectKBest(score_func=f_regression, k=200)
+feature_selection_skb = SelectKBest(score_func=f_regression, k=150)
 feature_selection_skb.fit(X_train, y_train)
 # Get new data set containing only selected features
-X_selected_skb = X_scaled[X_scaled.columns[feature_selection_skb.get_support()]]
+X_selected_skb = X_selected[X_selected.columns[feature_selection_skb.get_support()]]
 # Print feature selection results
 print("SelectKBest, selected features:", len(X_selected_skb.columns))
 X_train_fs_skb, X_test_fs_skb = train_test_split(X_selected_skb, train_size=0.8, test_size=0.2, shuffle=False)
@@ -89,7 +91,7 @@ print("Feature selection - SelectFromModel")
 feature_selection_sfm = SelectFromModel(ridge_reg_cv, threshold="median")
 feature_selection_sfm.fit(X_train, y_train)
 # Get new data set containing only selected features
-X_selected_sfm = X_scaled[X_scaled.columns[feature_selection_sfm.get_support()]]
+X_selected_sfm = X_selected[X_selected.columns[feature_selection_sfm.get_support()]]
 # Print feature selection results
 print("SelectFromModel, selected features:", len(X_selected_sfm.columns))
 X_train_fs_sfm, X_test_fs_sfm = train_test_split(X_selected_sfm, train_size=0.8, test_size=0.2, shuffle=False)
@@ -111,7 +113,7 @@ results_fs_rfe = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_
 results_fs_rfe_log = utilities.test_regressions(reg_list, X_train_fs_rfe, X_test_fs_rfe, y_train_log, y_test_log,
                                                 '_rfe_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 print("Perform test - SKB")
-results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb_log',
+results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb',
                                             plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 results_fs_skb_log = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train_log, y_test_log,
                                                 '_skb_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
@@ -121,6 +123,6 @@ results_fs_sfm = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_
 results_fs_sfm_log = utilities.test_regressions(reg_list, X_train_fs_sfm, X_test_fs_sfm, y_train_log, y_test_log,
                                                 '_sfm_log', plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 
-out_df = pd.concat([results, results_log, results_pca, results_pca_log, results_fs_rfe_log, results_fs_skb,
-                    results_fs_skb_log, results_fs_sfm, results_fs_sfm_log])
-out_df.to_csv(output_directory + 'results.csv', sep=';')
+out_df = pd.concat([results, results_pca, results_fs_rfe, results_fs_skb, results_fs_sfm,
+                    results_log, results_pca_log, results_fs_rfe_log, results_fs_skb_log, results_fs_sfm_log])
+out_df.to_csv(output_directory + 'lin_3results.csv', sep=';')

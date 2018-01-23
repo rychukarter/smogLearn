@@ -2,7 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import learning_curve
-from sklearn.metrics import r2_score, mean_absolute_error
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+
+
+def calculate_r_score(r_squared):
+    return np.sqrt(r_squared)
+
+
+def calculate_rmse_score(mse):
+    return np.sqrt(mse)
 
 
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=1, train_sizes=np.linspace(.1, 1.0, 10)):
@@ -57,6 +65,8 @@ def test_one_regression(estimator, X_train, X_test, y_train, y_test, print_resul
     mea_train = mean_absolute_error(y_train, y_pred_train)
     r2_test = r2_score(y_test, y_pred)
     r2_train = r2_score(y_train, y_pred_train)
+    mse_test = mean_squared_error(y_test, y_pred)
+    mse_train = mean_squared_error(y_train, y_pred_train)
 
     if print_results:
         print("MAE_test:\t", mea_test,
@@ -66,7 +76,9 @@ def test_one_regression(estimator, X_train, X_test, y_train, y_test, print_resul
               "\n-----------------------------------------------------------------")
         plot_error_histogram(y_test, y_pred).show()
 
-    return y_pred, y_pred_train, mea_test, mea_train, r2_test, r2_train
+    return y_pred, y_pred_train, [mea_test, mea_train, r2_test, r2_train, mse_test, mse_train,
+                                  calculate_r_score(r2_test), calculate_r_score(r2_train),
+                                  calculate_rmse_score(mse_test), calculate_rmse_score(mse_train)]
 
 
 def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_scores', save_path=None,
@@ -76,9 +88,9 @@ def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_s
     index = [(x[0] + data_name) for x in estimators]
     results = []
     for name, e in estimators:
-        y_pred, y_pred_train, mea_test, mea_train, r2_test, r2_train = test_one_regression(e, X_train, X_test, y_train,
+        y_pred, y_pred_train, scores = test_one_regression(e, X_train, X_test, y_train,
                                                                                            y_test)
-        results.append([mea_test, mea_train, r2_test, r2_train])
+        results.append(scores)
         if plot_learning_curves:
             lc = plot_learning_curve(e, name+data_name, X_train, y_train, train_sizes=train_sizes)
             if save_path:
@@ -96,4 +108,5 @@ def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_s
             hist_test.close()
             hist_train.close()
 
-    return pd.DataFrame(results, columns=['MEA_test', 'MEA_train', 'R2_test', 'R2_train'], index=index)
+    return pd.DataFrame(results, columns=['MEA_test', 'MEA_train', 'R2_test', 'R2_train', 'MSE_test', 'MSE_train',
+                                          'R_test', 'R_train', 'RMSE_test', 'RMSE_train'], index=index)
