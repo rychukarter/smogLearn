@@ -10,7 +10,7 @@ from sklearn.model_selection import ShuffleSplit, train_test_split
 from sklearn.decomposition import PCA
 
 # Directory to save results
-output_directory = './results/linear/scaled_std/'
+output_directory = './shits/linear/scaled_std/'
 if not os.path.isdir(output_directory):
     os.makedirs(output_directory)
 
@@ -67,7 +67,7 @@ reg_list = [("Ridge", ridge_reg),
 
 print("Feature selection - RFE")
 # Feature selection - done with recursive feature elimination
-feature_selection_rfe = RFECV(ridge_reg, step=1, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2,
+feature_selection_rfe = RFECV(ridge_reg, step=100, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2,
                                                                             random_state=2973))
 feature_selection_rfe.fit(X_train, y_train)
 # Get new data set containing only selected features

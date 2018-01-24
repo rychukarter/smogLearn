@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import os
 from utilities import utilities
 from sklearn.utils import shuffle

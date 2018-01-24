@@ -11,11 +11,13 @@ feature_list = ["Widzialność", "Widzialność operatora", "Kierunek wiatru", "
                 "Ciśnienie na pozimie morza", "Charakterystyka tendencji", "Wartość tendencji",
                 "Temperatura punktu rosy"]
 
+# Look up folders for raw data files
 synop_files = process_data.get_file_list(synop_dir)
 terminowe_files = process_data.get_file_list(terminowe_dir)
 pollution_24_files = process_data.get_file_list(pollution_24h_dir)
 pollution_1h_files = process_data.get_file_list(pollution_1h_dir)
 
+# Get data from separate files into dataframes
 pollution_1h_data = process_data.get_pollution_1h_data(pollution_1h_files, "HERE")
 print("\n----------------------------------------------------------\n")
 weather_1h_data = process_data.get_processed_weather_data_term(terminowe_files, format_dir, feature_list)
@@ -25,6 +27,9 @@ print("\n----------------------------------------------------------\n")
 weather_24h_data = process_data.get_processed_weather_data_dob(synop_files, format_dir)
 print("\n----------------------------------------------------------\n")
 
+# Get daily data by concating two dataframes
+# Add column with past data
+# Add targets column with future data
 df = pd.concat([weather_24h_data, pollution_24h_data], axis=1)
 df.index = pd.to_datetime(df.index)
 df["Dzień tygodnia"] = df.index.weekday
@@ -33,6 +38,9 @@ df["PM10_next"] = df["PM10"].shift(-1)
 df = df.dropna(axis=0, how="any")
 df.to_csv("data_daily.csv", sep=";")
 
+# Get daily_hourly data by concating all dataframes
+# Add column with past data
+# Add targets column with future data
 df2 = pd.concat([weather_24h_data, weather_1h_data, pollution_24h_data, pollution_1h_data], axis=1)
 df2.index = pd.to_datetime(df2.index)
 df2["Dzień tygodnia"] = df2.index.weekday
