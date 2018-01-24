@@ -19,7 +19,7 @@ if not os.path.isdir(output_directory):
 
 print("Pre-processing")
 # Import data
-data = pd.read_csv("out.csv", delimiter=";", index_col=0)
+data = pd.read_csv("data_daily_hourly.csv", delimiter=";", index_col=0)
 # Shuffle only once to get same data order for every test - no shuffling later (except CV)
 data = shuffle(data, random_state=333)
 
@@ -44,11 +44,13 @@ ridge_reg = RidgeCV(alphas=(50.0, 100.0, 200.0), normalize=False)
 dt_reg = DecisionTreeRegressor(max_depth=10)
 rf_reg = RandomForestRegressor(n_estimators=15, max_depth=20)
 svr_rbf_reg = SVR(kernel='rbf', C=1000, gamma=1e-7)
+mlp_reg = MLPRegressor(activation='logistic')
 
 reg_list = [("RidgeCV", ridge_reg),
             ("DT", dt_reg),
             ("RF", rf_reg),
-            ("SVR_RBF", svr_rbf_reg)]
+            ("SVR_RBF", svr_rbf_reg),
+            ("MLP", mlp_reg)]
 
 results = utilities.test_regressions(reg_list, X_train, X_test, y_train, y_test, '',
                                      plot_learning_curves=True, plot_histogram=True, save_path=output_directory)

@@ -17,7 +17,7 @@ if not os.path.isdir(output_directory):
 
 print("Pre-processing")
 # Import data
-data = pd.read_csv("out.csv", delimiter=";", index_col=0)
+data = pd.read_csv("data_daily_hourly.csv", delimiter=";", index_col=0)
 # Shuffle only once to get same data order for every test - no shuffling later (except CV)
 data = shuffle(data, random_state=333)
 
@@ -91,7 +91,7 @@ print("Perform test - PCA")
 results_pca = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train, y_test, '_pca',
                                          plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 results_pca_log = utilities.test_regressions(reg_list, X_train_pca, X_test_pca, y_train_log, y_test_log, '_pca_log',
-                                         plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
+                                             plot_learning_curves=True, plot_histogram=True, save_path=output_directory)
 print("Perform test - SKB")
 results_fs_skb = utilities.test_regressions(reg_list, X_train_fs_skb, X_test_fs_skb, y_train, y_test, '_skb',
                                             plot_learning_curves=True, plot_histogram=True, save_path=output_directory)

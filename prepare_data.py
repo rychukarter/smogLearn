@@ -34,7 +34,7 @@ df = df.dropna(axis=0, how="any")
 df.to_csv("data_daily_hourly.csv", sep=";")
 
 df2 = pd.concat([weather_24h_data, pollution_24h_data], axis=1)
-df2.index = pd.to_datetime(df.index)
+df2.index = pd.to_datetime(df2.index)
 df2["Dzień tygodnia"] = df2.index.weekday
 df2["PM10_prev"] = df2["PM10"].shift(1)
 df2["PM10_next"] = df2["PM10"].shift(-1)

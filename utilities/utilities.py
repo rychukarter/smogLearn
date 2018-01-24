@@ -13,6 +13,10 @@ def calculate_rmse_score(mse):
     return np.sqrt(mse)
 
 
+def calculate_mape_score(y_test, y_pred):
+    return np.mean(np.abs((y_test - y_pred) / y_test)) * 100
+
+
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None, n_jobs=1, train_sizes=np.linspace(.1, 1.0, 10)):
 
     plt.figure()
@@ -78,7 +82,8 @@ def test_one_regression(estimator, X_train, X_test, y_train, y_test, print_resul
 
     return y_pred, y_pred_train, [mea_test, mea_train, r2_test, r2_train, mse_test, mse_train,
                                   calculate_r_score(r2_test), calculate_r_score(r2_train),
-                                  calculate_rmse_score(mse_test), calculate_rmse_score(mse_train)]
+                                  calculate_rmse_score(mse_test), calculate_rmse_score(mse_train),
+                                  calculate_mape_score(y_test, y_pred), calculate_mape_score(y_train, y_pred_train)]
 
 
 def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_scores', save_path=None,
@@ -108,4 +113,5 @@ def test_regressions(estimators, X_train, X_test, y_train, y_test, data_name='_s
             hist_train.close()
 
     return pd.DataFrame(results, columns=['MEA_test', 'MEA_train', 'R2_test', 'R2_train', 'MSE_test', 'MSE_train',
-                                          'R_test', 'R_train', 'RMSE_test', 'RMSE_train'], index=index)
+                                          'R_test', 'R_train', 'RMSE_test', 'RMSE_train', 'MAPE_test', 'MAPE_train'],
+                        index=index)

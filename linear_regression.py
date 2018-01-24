@@ -10,13 +10,13 @@ from sklearn.model_selection import ShuffleSplit, train_test_split
 from sklearn.decomposition import PCA
 
 # Directory to save results
-output_directory = './results/linear/scaled_minmax/'
+output_directory = './results/linear/scaled_std/'
 if not os.path.isdir(output_directory):
     os.makedirs(output_directory)
 
 print("Pre-processing")
 # Import data
-data = pd.read_csv("out.csv", delimiter=";", index_col=0)
+data = pd.read_csv("data_daily_hourly.csv", delimiter=";", index_col=0)
 # Shuffle only once to get same data order for every test - no shuffling later (except CV)
 data = shuffle(data, random_state=333)
 
@@ -40,7 +40,7 @@ minmax_output = minmax.fit_transform(X)
 X_scaled_minmax = pd.DataFrame(minmax_output, columns=column_names, index=X.index)
 
 # Select between Normalization and Scaling
-X_selected = X_scaled_minmax
+X_selected = X_scaled_std
 # Split data into train and test without shuffling - test size: 20%
 X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_selected, y, y_log,
                                                                              train_size=0.8, test_size=0.2,
