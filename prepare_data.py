@@ -25,18 +25,20 @@ print("\n----------------------------------------------------------\n")
 weather_24h_data = process_data.get_processed_weather_data_dob(synop_files, format_dir)
 print("\n----------------------------------------------------------\n")
 
-df = pd.concat([weather_24h_data, weather_1h_data, pollution_24h_data, pollution_1h_data], axis=1)
+df = pd.concat([weather_24h_data, pollution_24h_data], axis=1)
 df.index = pd.to_datetime(df.index)
 df["Dzień tygodnia"] = df.index.weekday
 df["PM10_prev"] = df["PM10"].shift(1)
 df["PM10_next"] = df["PM10"].shift(-1)
 df = df.dropna(axis=0, how="any")
-df.to_csv("data_daily_hourly.csv", sep=";")
+df.to_csv("data_daily.csv", sep=";")
 
-df2 = pd.concat([weather_24h_data, pollution_24h_data], axis=1)
+df2 = pd.concat([weather_24h_data, weather_1h_data, pollution_24h_data, pollution_1h_data], axis=1)
 df2.index = pd.to_datetime(df2.index)
 df2["Dzień tygodnia"] = df2.index.weekday
 df2["PM10_prev"] = df2["PM10"].shift(1)
 df2["PM10_next"] = df2["PM10"].shift(-1)
 df2 = df2.dropna(axis=0, how="any")
-df2.to_csv("data_daily.csv", sep=";")
+df2.to_csv("data_daily_hourly.csv", sep=";")
+
+
