@@ -115,7 +115,7 @@ knn_reg = KNeighborsRegressor()
 # Tuning hyper-parameters of estimators with cross-validated GridSearch
 print('Searching for SVR with linear kernel parameters')
 svr_params = [
-    {'C': [1, 10, 100], 'kernel': ['linear']}
+    {'C': [1, 10, 15, 50], 'kernel': ['linear']}
 ]
 svr_linear_grid = GridSearchCV(svr_linear_reg, svr_params, n_jobs=1, verbose=0, return_train_score=True)
 svr_linear_grid.fit(X_train, y_train)
@@ -125,7 +125,7 @@ svr_linear_grid_results.to_csv(output_directory + 'svr_linear_grid.csv', sep=";"
 
 print('Searching for SVR with rbf kernel parameters')
 svr_params = [
-    {'C': [1, 10, 100, 1000], 'gamma': [1e-8, 1e-7, 1e-6, 1e-5], 'kernel': ['rbf']}
+    {'C': [100, 500, 1000], 'gamma': [1e-6, 0.5e-5, 1e-5, 1e-4], 'kernel': ['rbf']}
 ]
 svr_rbf_grid = GridSearchCV(svr_rbf_reg, svr_params, n_jobs=1, verbose=0, return_train_score=True)
 svr_rbf_grid.fit(X_train, y_train)
@@ -135,9 +135,9 @@ svr_rbf_grid_results.to_csv(output_directory + 'svr_rbf_grid.csv', sep=";")
 
 print('Searching for MLP parameters')
 mlp_params = [
-    {'hidden_layer_sizes': [(100,), (400,), (100, 100), (400, 100), (400, 100, 50)],
+    {'hidden_layer_sizes': [(50, 100), (100, 100), (400, 100), (200, 100, 50)],
      'activation': ['identity'],
-     'alpha': [0.0001, 0.001, 0.01]}
+     'alpha': [0.001, 0.005, 0.01]}
 ]
 mlp_grid = GridSearchCV(mlp_reg, mlp_params, n_jobs=1, verbose=0, return_train_score=True)
 mlp_grid.fit(X_train, y_train)
@@ -147,7 +147,7 @@ mlp_grid_results.to_csv(output_directory + 'mlp_grid.csv', sep=";")
 
 print('Searching for DT parameters')
 dt_params = [
-    {'max_depth': [5, 10, 15, 20]}
+    {'max_depth': [3, 4, 5]}
 ]
 dt_grid = GridSearchCV(dt_reg, dt_params, n_jobs=1, verbose=0, return_train_score=True)
 dt_grid.fit(X_train, y_train)
@@ -157,7 +157,7 @@ dt_grid_results.to_csv(output_directory + 'dt_grid.csv', sep=";")
 
 print('Searching for ET parameters')
 et_params = [
-    {'n_estimators': [5, 10, 15, 20, 50], 'max_depth': [5, 10, 15, 20]}
+    {'n_estimators': [10, 20, 50, 100], 'max_depth': [10, 15, 20]}
 ]
 et_grid = GridSearchCV(et_reg, et_params, n_jobs=1, verbose=0, return_train_score=True)
 et_grid.fit(X_train, y_train)
@@ -167,7 +167,7 @@ et_grid_results.to_csv(output_directory + 'et_grid.csv', sep=";")
 
 print('Searching for RF parameters')
 rf_params = [
-    {'n_estimators': [10, 15, 17, 20, 25, 30, 50], 'max_depth': [10, 15, 20]}
+    {'n_estimators': [25, 30, 50, 100], 'max_depth': [10, 15, 20]}
 ]
 rf_grid = GridSearchCV(rf_reg, rf_params, n_jobs=1, verbose=0, return_train_score=True)
 rf_grid.fit(X_train, y_train)
@@ -177,7 +177,7 @@ rf_grid_results.to_csv(output_directory + 'rf_grid.csv', sep=";")
 
 print('Searching for KNN parameters')
 knn_params = [
-    {'n_neighbors': [3, 5, 7, 10, 15]}
+    {'n_neighbors': [10, 15, 20, 50]}
 ]
 knn_grid = GridSearchCV(knn_reg, knn_params, n_jobs=1, verbose=0, return_train_score=True)
 knn_grid.fit(X_train, y_train)

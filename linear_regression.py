@@ -10,7 +10,7 @@ from sklearn.model_selection import ShuffleSplit, train_test_split
 from sklearn.decomposition import PCA
 
 # Directory to save results
-output_directory = './shits/linear/scaled_std/'
+output_directory = './results/linear/scaled_std/'
 if not os.path.isdir(output_directory):
     os.makedirs(output_directory)
 

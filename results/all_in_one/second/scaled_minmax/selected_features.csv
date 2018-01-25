@@ -1,0 +1,354 @@
+features;RFE;SelectKBest;SelectFromModel
+Miesiąc;;;
+Maksymalna temperatura dobowa;;X;X
+Minimalna temperatura dobowa;;X;X
+Średnia temperatura dobowa;;X;
+Temperatura minimalna przy gruncie;;X;X
+Suma dobowa opadu;X;;X
+Wysokość pokrywy śnieżnej;;X;X
+Równoważnik wodny śniegu;;;X
+Usłonecznienie;;;X
+Czas trwania opadu deszczu;;;
+Czas trwania opadu śniegu;;;X
+Czas trwania opadu deszczu ze śniegiem;;;X
+Czas trwania gradu;;;X
+Czas trwania mgły;X;;X
+Czas trwania zamglenia;;X;
+Czas trwania sadzi;X;;X
+Czas trwania gołoledzi;;;
+Czas trwania zamieci śnieżnej niskiej;X;;X
+Czas trwania zamieci śnieżnej wysokiej;;;X
+Czas trwania zmętnienia;X;;X
+Czas trwania wiatru >=10m/s;;;
+Czas trwania wiatru >15m/s;X;;X
+Czas trwania burzy;;;X
+Czas trwania rosy;;;X
+Czas trwania szronu;;;
+Wystąpienie pokrywy śnieżnej;;X;
+Izoterma dolna;;;
+Izoterma górna;;;X
+Aktynometria;;;
+Miesiąc.1;;;
+Średnie dobowe zachmurzenie ogólne;;;X
+Średnia dobowa prędkość wiatru;;;
+Średnia dobowe ciśnienie pary wodnej;;X;
+Średnia dobowa wilgotność względna;;;
+Średnia dobowe ciśnienie na poziomie stacji;;X;
+Średnie dobowe ciśnienie na pozimie morza;;X;
+Suma opadu dzień;;;
+Suma opadu noc;X;;X
+Widzialność_0;;;X
+Widzialność_1;;;
+Widzialność_2;;;
+Widzialność_3;;;
+Widzialność_4;;;X
+Widzialność_5;;;X
+Widzialność_6;;X;X
+Widzialność_7;;X;
+Widzialność_8;;X;X
+Widzialność_9;;X;X
+Widzialność_10;;X;
+Widzialność_11;;X;X
+Widzialność_12;;X;X
+Widzialność_13;;X;X
+Widzialność_14;;X;
+Widzialność_15;;X;X
+Widzialność_16;;X;X
+Widzialność_17;;X;X
+Widzialność_18;;X;
+Widzialność_19;X;X;X
+Widzialność_20;X;X;X
+Widzialność_21;;X;
+Widzialność_22;;X;X
+Widzialność_23;X;X;X
+Widzialność operatora_0;;;
+Widzialność operatora_1;;;
+Widzialność operatora_2;;;
+Widzialność operatora_3;;;X
+Widzialność operatora_4;;;
+Widzialność operatora_5;;;
+Widzialność operatora_6;;;X
+Widzialność operatora_7;;;
+Widzialność operatora_8;;;X
+Widzialność operatora_9;;;X
+Widzialność operatora_10;;;X
+Widzialność operatora_11;;;
+Widzialność operatora_12;;;X
+Widzialność operatora_13;;;
+Widzialność operatora_14;;;
+Widzialność operatora_15;;;X
+Widzialność operatora_16;;;
+Widzialność operatora_17;;;
+Widzialność operatora_18;;;X
+Widzialność operatora_19;;;
+Widzialność operatora_20;;;X
+Widzialność operatora_21;;;
+Widzialność operatora_22;;;
+Widzialność operatora_23;;;
+Kierunek wiatru_0;;;
+Kierunek wiatru_1;;;
+Kierunek wiatru_2;;;
+Kierunek wiatru_3;;;
+Kierunek wiatru_4;;;
+Kierunek wiatru_5;;;X
+Kierunek wiatru_6;;;
+Kierunek wiatru_7;;;
+Kierunek wiatru_8;;;X
+Kierunek wiatru_9;;;
+Kierunek wiatru_10;;;
+Kierunek wiatru_11;;;
+Kierunek wiatru_12;;;
+Kierunek wiatru_13;;;
+Kierunek wiatru_14;;;
+Kierunek wiatru_15;;;
+Kierunek wiatru_16;;;
+Kierunek wiatru_17;;;
+Kierunek wiatru_18;;;X
+Kierunek wiatru_19;;;
+Kierunek wiatru_20;;;
+Kierunek wiatru_21;;;
+Kierunek wiatru_22;;;X
+Kierunek wiatru_23;;;
+Prędkość wiatru_0;X;;X
+Prędkość wiatru_1;;;X
+Prędkość wiatru_2;;;
+Prędkość wiatru_3;;;X
+Prędkość wiatru_4;;;X
+Prędkość wiatru_5;;;
+Prędkość wiatru_6;;;
+Prędkość wiatru_7;;;
+Prędkość wiatru_8;;;
+Prędkość wiatru_9;;;X
+Prędkość wiatru_10;;;X
+Prędkość wiatru_11;;;
+Prędkość wiatru_12;;;X
+Prędkość wiatru_13;;;
+Prędkość wiatru_14;;;X
+Prędkość wiatru_15;;;
+Prędkość wiatru_16;;;X
+Prędkość wiatru_17;;;X
+Prędkość wiatru_18;;;X
+Prędkość wiatru_19;;;
+Prędkość wiatru_20;;;X
+Prędkość wiatru_21;;;X
+Prędkość wiatru_22;;;
+Prędkość wiatru_23;X;;X
+Temperatura powietrza_0;X;X;X
+Temperatura powietrza_1;X;X;X
+Temperatura powietrza_2;;X;X
+Temperatura powietrza_3;;X;
+Temperatura powietrza_4;;X;
+Temperatura powietrza_5;X;X;X
+Temperatura powietrza_6;X;X;X
+Temperatura powietrza_7;X;X;X
+Temperatura powietrza_8;;X;X
+Temperatura powietrza_9;;X;X
+Temperatura powietrza_10;;X;X
+Temperatura powietrza_11;;X;X
+Temperatura powietrza_12;;X;
+Temperatura powietrza_13;X;X;X
+Temperatura powietrza_14;X;X;X
+Temperatura powietrza_15;X;X;X
+Temperatura powietrza_16;;X;X
+Temperatura powietrza_17;;X;
+Temperatura powietrza_18;X;X;X
+Temperatura powietrza_19;;X;
+Temperatura powietrza_20;X;X;X
+Temperatura powietrza_21;;X;X
+Temperatura powietrza_22;;X;X
+Temperatura powietrza_23;X;X;X
+Wilgotność względna_0;;;X
+Wilgotność względna_1;;;X
+Wilgotność względna_2;;;X
+Wilgotność względna_3;;;
+Wilgotność względna_4;;;X
+Wilgotność względna_5;;;
+Wilgotność względna_6;;;
+Wilgotność względna_7;;;X
+Wilgotność względna_8;;;
+Wilgotność względna_9;;;X
+Wilgotność względna_10;;;
+Wilgotność względna_11;;;
+Wilgotność względna_12;;;X
+Wilgotność względna_13;;;X
+Wilgotność względna_14;;;X
+Wilgotność względna_15;;;
+Wilgotność względna_16;;;X
+Wilgotność względna_17;;;X
+Wilgotność względna_18;;;
+Wilgotność względna_19;;;X
+Wilgotność względna_20;;;X
+Wilgotność względna_21;;;X
+Wilgotność względna_22;;;X
+Wilgotność względna_23;;;X
+Ciśnienie pary wodnej_0;;X;X
+Ciśnienie pary wodnej_1;;X;
+Ciśnienie pary wodnej_2;;X;
+Ciśnienie pary wodnej_3;;X;
+Ciśnienie pary wodnej_4;;X;X
+Ciśnienie pary wodnej_5;;X;X
+Ciśnienie pary wodnej_6;;X;X
+Ciśnienie pary wodnej_7;;X;X
+Ciśnienie pary wodnej_8;;X;X
+Ciśnienie pary wodnej_9;;X;X
+Ciśnienie pary wodnej_10;;X;X
+Ciśnienie pary wodnej_11;;X;X
+Ciśnienie pary wodnej_12;;X;
+Ciśnienie pary wodnej_13;;X;
+Ciśnienie pary wodnej_14;;X;X
+Ciśnienie pary wodnej_15;X;X;X
+Ciśnienie pary wodnej_16;X;X;X
+Ciśnienie pary wodnej_17;X;X;X
+Ciśnienie pary wodnej_18;;X;X
+Ciśnienie pary wodnej_19;;X;
+Ciśnienie pary wodnej_20;;X;X
+Ciśnienie pary wodnej_21;X;X;X
+Ciśnienie pary wodnej_22;X;X;X
+Ciśnienie pary wodnej_23;;X;X
+Ciśnienie na pozimie stacji_0;;;
+Ciśnienie na pozimie stacji_1;;;
+Ciśnienie na pozimie stacji_2;;;
+Ciśnienie na pozimie stacji_3;;;
+Ciśnienie na pozimie stacji_4;;;
+Ciśnienie na pozimie stacji_5;;;
+Ciśnienie na pozimie stacji_6;;;
+Ciśnienie na pozimie stacji_7;;;
+Ciśnienie na pozimie stacji_8;;;
+Ciśnienie na pozimie stacji_9;;;X
+Ciśnienie na pozimie stacji_10;;;
+Ciśnienie na pozimie stacji_11;;;
+Ciśnienie na pozimie stacji_12;;;
+Ciśnienie na pozimie stacji_13;;;
+Ciśnienie na pozimie stacji_14;;;
+Ciśnienie na pozimie stacji_15;;;
+Ciśnienie na pozimie stacji_16;;X;
+Ciśnienie na pozimie stacji_17;;X;
+Ciśnienie na pozimie stacji_18;;X;
+Ciśnienie na pozimie stacji_19;;;
+Ciśnienie na pozimie stacji_20;;;
+Ciśnienie na pozimie stacji_21;;;
+Ciśnienie na pozimie stacji_22;;;
+Ciśnienie na pozimie stacji_23;;;
+Ciśnienie na pozimie morza_0;;X;
+Ciśnienie na pozimie morza_1;;X;
+Ciśnienie na pozimie morza_2;;X;
+Ciśnienie na pozimie morza_3;;X;
+Ciśnienie na pozimie morza_4;;X;
+Ciśnienie na pozimie morza_5;;X;
+Ciśnienie na pozimie morza_6;;X;
+Ciśnienie na pozimie morza_7;;X;
+Ciśnienie na pozimie morza_8;;X;
+Ciśnienie na pozimie morza_9;X;X;X
+Ciśnienie na pozimie morza_10;;X;
+Ciśnienie na pozimie morza_11;;X;
+Ciśnienie na pozimie morza_12;;X;
+Ciśnienie na pozimie morza_13;;X;
+Ciśnienie na pozimie morza_14;;X;
+Ciśnienie na pozimie morza_15;;X;
+Ciśnienie na pozimie morza_16;;X;
+Ciśnienie na pozimie morza_17;;X;
+Ciśnienie na pozimie morza_18;;X;X
+Ciśnienie na pozimie morza_19;;X;
+Ciśnienie na pozimie morza_20;;X;
+Ciśnienie na pozimie morza_21;;X;
+Ciśnienie na pozimie morza_22;;X;
+Ciśnienie na pozimie morza_23;;X;
+Charakterystyka tendencji_0;;;
+Charakterystyka tendencji_1;;;
+Charakterystyka tendencji_2;;;
+Charakterystyka tendencji_3;;;
+Charakterystyka tendencji_4;;;
+Charakterystyka tendencji_5;;;
+Charakterystyka tendencji_6;;;
+Charakterystyka tendencji_7;;;X
+Charakterystyka tendencji_8;;;
+Charakterystyka tendencji_9;;;
+Charakterystyka tendencji_10;;;
+Charakterystyka tendencji_11;;;
+Charakterystyka tendencji_12;;;
+Charakterystyka tendencji_13;;;
+Charakterystyka tendencji_14;;;
+Charakterystyka tendencji_15;;;
+Charakterystyka tendencji_16;;;
+Charakterystyka tendencji_17;;;
+Charakterystyka tendencji_18;;;
+Charakterystyka tendencji_19;;;
+Charakterystyka tendencji_20;;;
+Charakterystyka tendencji_21;;;X
+Charakterystyka tendencji_22;;;
+Charakterystyka tendencji_23;;;
+Wartość tendencji_0;;;X
+Wartość tendencji_1;;;X
+Wartość tendencji_2;;;X
+Wartość tendencji_3;;;
+Wartość tendencji_4;;;X
+Wartość tendencji_5;X;;X
+Wartość tendencji_6;;;X
+Wartość tendencji_7;X;;
+Wartość tendencji_8;X;;X
+Wartość tendencji_9;X;;X
+Wartość tendencji_10;;;
+Wartość tendencji_11;;;
+Wartość tendencji_12;;;X
+Wartość tendencji_13;;;
+Wartość tendencji_14;;;X
+Wartość tendencji_15;;;X
+Wartość tendencji_16;;;X
+Wartość tendencji_17;;;X
+Wartość tendencji_18;X;;X
+Wartość tendencji_19;;;
+Wartość tendencji_20;;;X
+Wartość tendencji_21;X;;X
+Wartość tendencji_22;X;;X
+Wartość tendencji_23;;;X
+Temperatura punktu rosy_0;;X;
+Temperatura punktu rosy_1;X;X;X
+Temperatura punktu rosy_2;X;X;X
+Temperatura punktu rosy_3;;X;X
+Temperatura punktu rosy_4;;X;X
+Temperatura punktu rosy_5;;X;X
+Temperatura punktu rosy_6;;X;
+Temperatura punktu rosy_7;;X;X
+Temperatura punktu rosy_8;;X;
+Temperatura punktu rosy_9;;X;
+Temperatura punktu rosy_10;X;X;X
+Temperatura punktu rosy_11;;X;X
+Temperatura punktu rosy_12;;X;X
+Temperatura punktu rosy_13;;X;
+Temperatura punktu rosy_14;;X;
+Temperatura punktu rosy_15;X;X;X
+Temperatura punktu rosy_16;;X;
+Temperatura punktu rosy_17;;X;X
+Temperatura punktu rosy_18;X;X;X
+Temperatura punktu rosy_19;;X;X
+Temperatura punktu rosy_20;X;X;X
+Temperatura punktu rosy_21;;X;
+Temperatura punktu rosy_22;X;X;X
+Temperatura punktu rosy_23;X;X;X
+PM10;X;X;X
+PM10_h_2;;X;
+PM10_h_3;;X;X
+PM10_h_4;;X;X
+PM10_h_5;;X;X
+PM10_h_6;X;;X
+PM10_h_7;;;
+PM10_h_8;;;X
+PM10_h_9;;X;
+PM10_h_10;;X;X
+PM10_h_11;;X;
+PM10_h_12;X;X;X
+PM10_h_13;;X;X
+PM10_h_14;X;X;X
+PM10_h_15;;X;X
+PM10_h_16;;X;X
+PM10_h_17;X;X;X
+PM10_h_18;X;X;X
+PM10_h_19;;X;
+PM10_h_20;;X;X
+PM10_h_21;;X;X
+PM10_h_22;;X;X
+PM10_h_23;X;X;X
+PM10_h_0;;X;
+PM10_h_1;X;X;X
+Dzień tygodnia;;;X
+PM10_prev;X;X;X
