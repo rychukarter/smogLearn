@@ -15,7 +15,7 @@ from sklearn.model_selection import ShuffleSplit, train_test_split, GridSearchCV
 from sklearn.decomposition import PCA
 
 # Directory to save results
-output_directory = './results/all_in_one/first/scaled_minmax/'
+output_directory = './results/all_in_one/second/scaled_minmax/'
 if not os.path.isdir(output_directory):
     os.makedirs(output_directory)
 
@@ -53,7 +53,7 @@ X_train, X_test, y_train, y_test, y_train_log, y_test_log = train_test_split(X_s
 print("Performing feature number reduction")
 print("Performing PCA")
 # Perform PCA
-pca = PCA(n_components=150)
+pca = PCA(n_components=50)
 X_pca = pca.fit_transform(X_scaled_std)
 X_train_pca, X_test_pca = train_test_split(X_pca, train_size=0.8, test_size=0.2, shuffle=False)
 
@@ -63,8 +63,7 @@ ridge_reg = Ridge(normalize=False)
 selected_features_df = pd.DataFrame(X.columns, columns=['features'])
 print("Feature selection - RFE")
 # Feature selection - done with recursive feature elimination
-feature_selection_rfe = RFECV(ridge_reg, step=10, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2,
-                                                                             random_state=2973))
+feature_selection_rfe = RFECV(ridge_reg, step=10, verbose=0, cv=ShuffleSplit(n_splits=5, train_size=0.8, test_size=0.2))
 feature_selection_rfe.fit(X_train, y_train)
 # Get new data set containing only selected features
 X_selected_rfe = X_selected[X_selected.columns[feature_selection_rfe.get_support()]]
@@ -103,6 +102,8 @@ selected_features_df.to_csv(output_directory + 'selected_features.csv', sep=';')
 
 # Get regressors objects
 print('Getting regressors')
+ridge_reg_cv = RidgeCV(alphas=(50.0, 100.0, 200.0), normalize=False)
+lasso_reg_cv = LassoCV(normalize=False, n_alphas=10)
 svr_rbf_reg = SVR(kernel='rbf')
 svr_linear_reg = SVR(kernel='linear')
 mlp_reg = MLPRegressor(learning_rate='adaptive')
@@ -111,6 +112,7 @@ et_reg = ExtraTreesRegressor()
 rf_reg = RandomForestRegressor()
 knn_reg = KNeighborsRegressor()
 
+# Tuning hyper-parameters of estimators with cross-validated GridSearch
 print('Searching for SVR with linear kernel parameters')
 svr_params = [
     {'C': [1, 10, 100], 'kernel': ['linear']}
@@ -183,9 +185,8 @@ knn_grid_results = pd.DataFrame(knn_grid.cv_results_)
 knn_grid_results = knn_grid_results.sort_values("rank_test_score")
 knn_grid_results.to_csv(output_directory + 'knn_grid.csv', sep=";")
 
-ridge_reg_cv = RidgeCV(alphas=(50.0, 100.0, 200.0), normalize=False)
-lasso_reg_cv = LassoCV(normalize=False, n_alphas=10)
 
+# Get regressors list for testing
 reg_list = [("RidgeCV", ridge_reg_cv),
             ("LassoCV", lasso_reg_cv),
             ("SVR_linear", svr_linear_grid.best_estimator_),
@@ -196,9 +197,11 @@ reg_list = [("RidgeCV", ridge_reg_cv),
             ("RF", rf_grid.best_estimator_),
             ("KNN", knn_grid.best_estimator_)]
 
+# Define testing
 plot_lc = True
 plot_hist = True
 n = 5
+# Test all regressor with all data combinations
 print("Perform test - basic data")
 results = utilities.test_regressions_n(reg_list, X_selected, y, n, '', plot_learning_curves=plot_lc,
                                        plot_histogram=plot_hist, save_path=output_directory)
@@ -224,7 +227,7 @@ results_fs_sfm = utilities.test_regressions_n(reg_list, X_selected_sfm, y, n, '_
                                               plot_histogram=plot_hist, save_path=output_directory)
 results_fs_sfm_log = utilities.test_regressions_n(reg_list, X_selected_sfm, y_log, n, '_sfm_log', plot_learning_curves=plot_lc,
                                                   plot_histogram=plot_hist, save_path=output_directory)
-
+# Save results
 out_df = pd.concat([results, results_pca, results_fs_rfe, results_fs_skb, results_fs_sfm,
                     results_log, results_pca_log, results_fs_rfe_log, results_fs_skb_log, results_fs_sfm_log])
 out_df.to_csv(output_directory + 'results.csv', sep=';')

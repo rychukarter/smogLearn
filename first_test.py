@@ -12,7 +12,7 @@ from sklearn.linear_model import RidgeCV
 
 
 # Directory to save results
-output_directory = './results/introduction/'
+output_directory = './results/first/'
 if not os.path.isdir(output_directory):
     os.makedirs(output_directory)
 
